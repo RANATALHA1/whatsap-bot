@@ -5,9 +5,10 @@ const app = express();
 app.use(express.json());
 
 const VERIFY_TOKEN = "2668677";
-const ACCESS_TOKEN = "EAAXSgkgfJY0BR9ZBWeCFZCVbT2fPdLbNPzAp18SZBbqOmpYUl8NVZAgtx1M1dLxs4o7ZBGRsMKAFHutVvcarRMdbVQiKoyeRWFAnMSWLToX6ZCP8hQu99vXMf25cw4zPQjQIItbKWVZAOOX1JvjlOI5g8VZBNZBMAWer9KJ0ZAZAdixRJKzmT8BvWkqGTGpfH18tGD6BwZDZD";
+const ACCESS_TOKEN = "EAAXSgkgfJY0BR9r6dDJOlSaZA4bVfZCs5vMZBWcqybRc8UMgN38GYDJLOcpr68N8tH6N8ZCznZAq34BqBSHEeq4rZCxBsAKB7edJ2bVLFTvAuW6wgOfROzeqjFA7X7AuuZBBWTnyoWYRU6ZBlbJzqojNYuSxr7ivvafJZAA8YZC1lgnhHyKsEqXZBr1UUNIyTWzouwYbgZDZD";
 const PHONE_NUMBER_ID = "1214381928423898";
 
+// Webhook Verification
 app.get("/webhook", (req, res) => {
   const mode = req.query["hub.mode"];
   const token = req.query["hub.verify_token"];
@@ -17,12 +18,14 @@ app.get("/webhook", (req, res) => {
     return res.status(200).send(challenge);
   }
 
-  res.sendStatus(403);
+  return res.sendStatus(403);
 });
 
+// Receive Messages
 app.post("/webhook", async (req, res) => {
   try {
-    const message = req.body.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
+    const message =
+      req.body.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
 
     if (message) {
       await axios.post(
@@ -32,14 +35,15 @@ app.post("/webhook", async (req, res) => {
           to: message.from,
           type: "text",
           text: {
-            body:
-Assalam-o-Alaikum! 🌸
+            body: Assalam-o-Alaikum! 🌸
 
 Hum se rabta karne ka shukriya.
 
-Kaam ki tamam details hasil karne ke liye neeche diya gaya WhatsApp group join karein.
+Kaam ki tamam details hasil karne ke liye neeche diye gaye WhatsApp group ko join karein.
 
 🔗 https://chat.whatsapp.com/IYxkIEFRBrvK5QMdD45pPK
+
+Shukriya!
           }
         },
         {
@@ -58,4 +62,8 @@ Kaam ki tamam details hasil karne ke liye neeche diya gaya WhatsApp group join k
   }
 });
 
-app.listen(process.env.PORT  3000);
+// Start Server
+const PORT = process.env.PORT  3000;
+app.listen(PORT, () => {
+  console.log(Server running on port ${PORT});
+});
