@@ -24,6 +24,9 @@ return res.sendStatus(403);
 // Receive Messages
 app.post("/webhook", async (req, res) => {
 try {
+console.log("WEBHOOK RECEIVED");
+console.log(JSON.stringify(req.body, null, 2));
+
 const message =
 req.body.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
 
