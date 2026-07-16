@@ -10,32 +10,32 @@ const PHONE_NUMBER_ID = "1214381928423898";
 
 // Webhook Verification
 app.get("/webhook", (req, res) => {
-  const mode = req.query["hub.mode"];
-  const token = req.query["hub.verify_token"];
-  const challenge = req.query["hub.challenge"];
+const mode = req.query["hub.mode"];
+const token = req.query["hub.verify_token"];
+const challenge = req.query["hub.challenge"];
 
-  if (mode === "subscribe" && token === VERIFY_TOKEN) {
-    return res.status(200).send(challenge);
-  }
+if (mode === "subscribe" && token === VERIFY_TOKEN) {
+return res.status(200).send(challenge);
+}
 
-  return res.sendStatus(403);
+return res.sendStatus(403);
 });
 
 // Receive Messages
 app.post("/webhook", async (req, res) => {
-  try {
-    const message =
-      req.body.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
+try {
+const message =
+req.body.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
 
-    if (message) {
-      await axios.post(
-        https://graph.facebook.com/v23.0/${PHONE_NUMBER_ID}/messages,
-        {
-          messaging_product: "whatsapp",
-          to: message.from,
-          type: "text",
-          text: {
-            body: Assalam-o-Alaikum! 🌸
+if (message) {
+await axios.post(
+`https://graph.facebook.com/v23.0/${PHONE_NUMBER_ID}/messages`,
+{
+messaging_product: "whatsapp",
+to: message.from,
+type: "text",
+text: {
+body: `Assalam-o-Alaikum! 🌸
 
 Hum se rabta karne ka shukriya.
 
@@ -43,27 +43,27 @@ Kaam ki tamam details hasil karne ke liye neeche diye gaye WhatsApp group ko joi
 
 🔗 https://chat.whatsapp.com/IYxkIEFRBrvK5QMdD45pPK
 
-Shukriya!
-          }
-        },
-        {
-          headers: {
-            Authorization: Bearer ${ACCESS_TOKEN},
-            "Content-Type": "application/json"
-          }
-        }
-      );
-    }
+Shukriya!`
+}
+},
+{
+headers: {
+Authorization: `Bearer ${ACCESS_TOKEN}`,
+"Content-Type": "application/json"
+}
+}
+);
+}
 
-    res.sendStatus(200);
-  } catch (err) {
-    console.error(err.response?.data  err.message);
-    res.sendStatus(500);
-  }
+res.sendStatus(200);
+} catch (err) {
+console.error(err.response?.data || err.message);
+res.sendStatus(500);
+}
 });
 
-const PORT = process.env.PORT  3000;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(Server running on port ${PORT});
+console.log(`Server running on port ${PORT}`);
 });
